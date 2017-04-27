@@ -1,0 +1,44 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a href="/">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold navbar-brand">Online Judge</strong>
+                                </span>
+                            </span>
+                    </a>
+                </div>
+                <div class="logo-element">
+                    发布
+                </div>
+            </li>
+            <li {% if breadcrumbs and breadcrumbs[2].text == '问题列表' %}class="active"{% endif %}>
+                <a href="/problems/"><i class="fa fa-dashboard"></i> <span class="nav-label">问题列表</span></a>
+            </li>
+            <li {% if breadcrumbs and breadcrumbs[2].text == '我的提交' %}class="active"{% endif %}>
+                <a href="/commits/"><i class="fa fa-edit"></i> <span class="nav-label">我的提交</span> </a>
+            </li>
+            <li {% if breadcrumbs and breadcrumbs[-1].text == '教师管理' %}class="active"{% endif %}>
+                <a href="/teachers/"><i class="fa fa-check-square"></i> <span class="nav-label">教师管理</span>
+                    <span class="label label-info pull-right">{{ approval_count }}</span>
+                </a>
+            </li>
+            {% if True %}
+                <li {% if breadcrumbs and breadcrumbs[2].text == '系统管理' %}class="active"{% endif %}>
+                    <a href="#"><i class="fa fa-wrench"></i> <span class="nav-label">系统管理</span> <span
+                            class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse">
+                        <li>
+                            <a href="/admin/tasks/">任务列表</a>
+                            <a href="/admin/users/">人员管理</a>
+                            <a href="/admin/problems/">题库管理</a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

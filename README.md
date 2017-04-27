@@ -1,2 +1,2 @@
 # oj-web
-An web implementation of online judge.
+An implementation of online judge.
