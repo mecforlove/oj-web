@@ -12,17 +12,17 @@
                     </a>
                 </div>
                 <div class="logo-element">
-                    发布
+                    OJ
                 </div>
             </li>
             <li {% if breadcrumbs and breadcrumbs[2].text == '问题列表' %}class="active"{% endif %}>
                 <a href="/problems/"><i class="fa fa-dashboard"></i> <span class="nav-label">问题列表</span></a>
             </li>
             <li {% if breadcrumbs and breadcrumbs[2].text == '我的提交' %}class="active"{% endif %}>
-                <a href="/commits/"><i class="fa fa-edit"></i> <span class="nav-label">我的提交</span> </a>
+                <a href="/commits/"><i class="fa fa-check-square"></i> <span class="nav-label">我的提交</span> </a>
             </li>
             <li {% if breadcrumbs and breadcrumbs[-1].text == '教师管理' %}class="active"{% endif %}>
-                <a href="/teachers/"><i class="fa fa-check-square"></i> <span class="nav-label">教师管理</span>
+                <a href="/teachers/"><i class="fa fa-edit"></i> <span class="nav-label">教师管理</span>
                     <span class="label label-info pull-right">{{ approval_count }}</span>
                 </a>
             </li>
