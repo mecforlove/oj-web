@@ -6,7 +6,7 @@
         </div>
         <ul class="nav navbar-top-links navbar-right">
             <li>
-                欢迎mec
+                欢迎{% if current_user.is_authenticated %}{{ current_user.name }}{% else %}Stranger{% endif %}!
             </li>
             <li>
                 <a href="/logout">

@@ -18,7 +18,7 @@ class Config(object):
 
 
 class TestingConfig(Config):
-    pass
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/oj-web'
 
 
 class ProductionConfig(Config):
