@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Author: mec
 from flask import render_template, request, jsonify, flash, redirect
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 
 from . import main
 from ..models.user import User
@@ -10,6 +10,7 @@ from ..utils.response import common_response
 
 
 @main.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
@@ -45,3 +46,11 @@ def login():
     else:
         flash(check[1], 'error')
         return render_template('main/login.html')
+
+
+@main.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect('/')

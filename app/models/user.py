@@ -26,6 +26,10 @@ class User(db.Model, BaseModel, TimeMixin, UserMixin):
             return False, 'wrong password'
         return True, 'login success', user
 
+    @property
+    def is_admin(self):
+        return self.id in [i.user_id for i in self.admins]
+
 
 class Admin(db.Model, BaseModel, TimeMixin):
     __tablename__ = 'admin'
