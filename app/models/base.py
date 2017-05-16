@@ -13,6 +13,10 @@ class BaseModel(object):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 class TimeMixin(object):
     gmt_created = db.Column(db.DateTime, server_default=func.now())

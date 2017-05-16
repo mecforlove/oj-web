@@ -13,8 +13,15 @@ class Problem(db.Model, BaseModel, TimeMixin):
     time = db.Column(db.Integer)  # 运行时间限制，单位ms
     mem = db.Column(db.Integer)  # 内存限制，单位KB
 
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
+
 
 class Course(db.Model, BaseModel, TimeMixin):
     __tablename__ = 'course'
 
     name = db.Column(db.String(256))  # 课程名
+    description = db.Column(db.String(128))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    problems = db.relationship('Problem', backref='course', lazy='dynamic')

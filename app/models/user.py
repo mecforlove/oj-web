@@ -16,6 +16,7 @@ class User(db.Model, BaseModel, TimeMixin, UserMixin):
     is_teacher = db.Column(db.Boolean, default=False)
 
     admins = db.relationship('Admin', backref='user', lazy='dynamic')
+    problems = db.relationship('Course', backref='user', lazy='dynamic')
 
     @classmethod
     def check_login(cls, name, passwd):

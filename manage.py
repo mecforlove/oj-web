@@ -4,6 +4,7 @@
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from app.models.user import User, Admin
+from app.models.problem import Problem, Course
 from app import create_app, db
 
 app = create_app('testing')

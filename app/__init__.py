@@ -23,5 +23,7 @@ def create_app(config_name):
     # register blueprints
     from main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+    from teacher import teachers as teachers_blueprint
+    app.register_blueprint(teachers_blueprint, url_prefix='/teachers')
 
     return app
