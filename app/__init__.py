@@ -25,5 +25,7 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
     from teacher import teachers as teachers_blueprint
     app.register_blueprint(teachers_blueprint, url_prefix='/teachers')
+    from student import students as students_blueprint
+    app.register_blueprint(students_blueprint, url_prefix='/students')
 
     return app

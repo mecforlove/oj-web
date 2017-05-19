@@ -17,6 +17,7 @@ class User(db.Model, BaseModel, TimeMixin, UserMixin):
 
     admins = db.relationship('Admin', backref='user', lazy='dynamic')
     problems = db.relationship('Course', backref='user', lazy='dynamic')
+    commits = db.relationship('Commit', backref='user', lazy='dynamic')
 
     @classmethod
     def check_login(cls, name, passwd):

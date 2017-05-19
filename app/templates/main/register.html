@@ -21,6 +21,13 @@
 {% block breadcrumb %}
     {% include "snippet/breadcrumb.html" %}
 {% endblock %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <input type="hidden" class="hidden-message" data-category="{{ category }}" data-message="{{ message }}"/>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="container">
     <div class="row main">
         <div class="panel-heading">

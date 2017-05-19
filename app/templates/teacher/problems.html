@@ -1,28 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}课程列表{% endblock %}
+{% block title %}题目列表{% endblock %}
 
 {% block page_content %}
 <div class="ibox float-e-margins">
     <div class="ibox-content">
+        <h2 style="text-align:center">{{ course.name }}</h2><hr/>
         <div class="dataTable_wrapper">
-            <button class="btn btn-primary" data-toggle="modal" onclick="add_course()">新建课程</button>
+            <button class="btn btn-primary" data-toggle="modal" onclick="add_problem()">上传题目</button>
             <table width="100%" class="table table-striped table-bordered table-hover center" id="dataTables-example">
                 <thead>
                 <tr>
-                    <th>课程名</th>
-                    <th>课程描述</th>
+                    <th>题目名称</th>
+                    <th>时间限制</th>
+                    <th>内存限制</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for course in courses %}
+                {% for problem in problems %}
                 <tr class="odd gradeX">
-                    <td><a href="/teachers/problems?course_id={{ course.id }}">{{ course.name }}</a></td>
-                    <td>{{ course.description }}</td>
+                    <td>{{ problem.title }}</td>
+                    <td>{{ problem.time }}</td>
+                    <td>{{ problem.mem }}</td>
                     <td>
-                        <button class="btn btn-primary btn-xs" onclick="edit_course('{{ course.id }}', '{{ course.name }}', '{{ course.description }}')">编辑</button>
-                        <button class="btn btn-primary btn-xs" onclick="del_course('{{ course.id }}')">删除</button>
+                        <button class="btn btn-primary btn-xs" onclick="edit_problem('{{ problem.id }}', '{{ problem.title }}',
+                        '{{ problem.time }}', '{{ problem.mem }}', '''{{ problem.content }}''')">编辑</button>
+                        <button class="btn btn-primary btn-xs" onclick="del_problem('{{ problem.id }}')">删除</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -31,37 +35,45 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal_form_course" role="dialog">
+<div class="modal fade" id="modal_form_problem" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">新建课程</h3>
+                <h3 class="modal-title">上传题目</h3>
             </div>
             <div class="modal-body form">
-                <form action="#" id="form_course" class="form-horizontal">
-                    <input id="course_id" type="hidden" value="" name="id"/>
+                <form action="#" id="form_problem" class="form-horizontal">
+                    <input id="problem_id" type="hidden" value="" name="id"/>
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">课程名称</label>
+                            <label class="control-label col-md-3">题目名称</label>
                             <div class="col-md-9">
-                                <input id="name" name="name" placeholder="" class="form-control" type="text">
+                                <input id="title" name="title" placeholder="" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">课程描述</label>
+                            <label class="control-label col-md-3">时间限制</label>
                             <div class="col-md-9">
-                                <input id="description" name="description" placeholder="" class="form-control" type="text">
+                                <input id="time" name="time" placeholder="" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">内存限制</label>
+                            <div class="col-md-9">
+                                <input id="mem" name="mem" placeholder="" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                     </div>
                 </form>
+                <textarea id="content" rows="15" cols="74"></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save_course()" class="btn btn-primary">保存</button>
+                <button type="button" id="btnSave" onclick="save_problem()" class="btn btn-primary">保存</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
@@ -105,51 +117,54 @@
         });
     });
 
-    function add_course() {
+    function add_problem() {
         save_method = 'add';
-        $('#form_course')[0].reset(); // reset form on modals
+        $('#form_problem')[0].reset(); // reset form on modals
+        $('#content').val('');
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
-        $('#modal_form_course').modal('show'); // show bootstrap modal
-        $('.modal-title').text('新建课程'); // Set Title to Bootstrap modal title
+        $('#modal_form_problem').modal('show'); // show bootstrap modal
+        $('.modal-title').text('上传题目'); // Set Title to Bootstrap modal title
     }
 
-    function save_course() {
+    function save_problem() {
         $.ajax({
-            url: "/teachers/save_course",
+            url: "/teachers/save_problem",
             type: "POST",
-            data: $('#form_course').serialize(),
+            data: $('#form_problem').serialize() + "&course_id={{ course.id }}&content=" + $('#content').val(),
             dataType: "JSON",
             success: function(resp) {
                 if (resp.code == 0) {
-                    $('#modal_form_course').modal('hide');
-                    window.location = "/teachers/courses";
+                    $('#modal_form_problem').modal('hide');
+                    window.location = "/teachers/problems?course_id={{ course.id }}";
                 }
             }
         });
     }
 
-    function edit_course(id, name, description) {
-        $('#form_course')[0].reset(); // reset form on modals
+    function edit_problem(id, title, time, mem, content) {
+        $('#form_problem')[0].reset(); // reset form on modals
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
-        $('#modal_form_course').modal('show'); // show bootstrap modal
-        $('.modal-title').text('编辑课程'); // Set Title to Bootstrap modal title
-        $('#course_id').val(id);
-        $('#name').val(name);
-        $('#description').val(description);
+        $('#modal_form_problem').modal('show'); // show bootstrap modal
+        $('.modal-title').text('编辑题目'); // Set Title to Bootstrap modal title
+        $('#problem_id').val(id);
+        $('#title').val(title);
+        $('#time').val(time);
+        $('#mem').val(mem);
+        $('#content').val(content);
     }
 
-    function del_course(course_id) {
+    function del_problem(problem_id) {
         $.ajax({
-            url: "/teachers/del_course",
+            url: "/teachers/del_problem",
             type: "POST",
             data: {
-                id: course_id
+                id: problem_id
             },
             dataType: "JSON",
             success: function(resp) {
-                window.location = "/teachers/courses";
+                window.location = "/teachers/problems?course_id={{ course.id }}";
             }
         });
     }

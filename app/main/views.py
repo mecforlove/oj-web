@@ -52,5 +52,5 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.')
-    return redirect('/')
+    flash(u'退出登录成功')
+    return redirect('/login')
