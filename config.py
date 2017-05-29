@@ -20,12 +20,12 @@ class Config(object):
 
 
 class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/oj-web'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/oj-web'
 
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
-                              'mysql://root:@localhost/oj-web'
+                              'mysql://root:root@localhost/oj-web'
 
     @classmethod
     def init_app(cls, app):
