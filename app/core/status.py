@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author: mec
-Status = {
+STATUS = {
     0: 'Waiting',
     1: 'Compiling',
     2: 'Accepted',

@@ -12,7 +12,7 @@ from ..utils.response import common_response
 @main.route('/')
 @login_required
 def index():
-    return render_template('index.html')
+    return redirect('/students/problems')
 
 
 @main.route('/register', methods=['GET', 'POST'])

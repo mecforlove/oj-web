@@ -11,6 +11,8 @@ class Config(object):
     WTF_CSRF_ENABLED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_POOL_RECYCLE = 30
+    CELERY_BROKER_URL = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 
     @classmethod
     def init_app(cls, app):

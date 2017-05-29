@@ -19,11 +19,11 @@
                 <tbody>
                 {% for problem in problems %}
                 <tr class="odd gradeX">
-                    <td><a href="/teachers/problems/{{ problem.id }}">{{ problem.id }}</a></td>
-                    <td><a href="/teachers/problems/{{ problem.id }}">{{ problem.title }}</a></td>
-                    <td><a href="/teachers/problems/{{ problem.id }}">{{ problem.id }}</a></td>
-                    <td><a href="/teachers/problems/{{ problem.id }}">{{ problem.id }}</a></td>
-                    <td><a href="/teachers/problems/{{ problem.id }}">{{ problem.id }}</a></td>
+                    <td><a href="/students/problems/{{ problem.id }}">{{ problem.id }}</a></td>
+                    <td><a href="/students/problems/{{ problem.id }}">{{ problem.title }}</a></td>
+                    <td><a href="/students/problems/{{ problem.id }}">{{ problem.pass_rate }}</a></td>
+                    <td><a href="/students/problems/{{ problem.id }}">{{ problem.pass_times }}</a></td>
+                    <td><a href="/students/problems/{{ problem.id }}">{{ problem.try_times }}</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}题目列表{% endblock %}
+
+{% block page_content %}
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <h1>{{ problem.title }}</h1>
+        <p>{{ problem.content | safe}}</p>
+    </div>
+</div>
+<div class="ibox float-e-margins">
+    <form id="form">
+        <label class="control-label">语言选择</label>
+        <select id="lan" class="form-control" style="max-width: 100px;">
+            <option>C</option>
+            <option>C++</option>
+            <option>Java</option>
+            <option>Python</option>
+        </select>
+        <hr />
+        <textarea id="src" rows="15" cols="74"></textarea><hr />
+        <button type="button" id="submit" onclick="submit_code()" class="btn btn-primary">提交</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block foot %}
+<script>
+    function submit_code() {
+        req_data = "lan=" + $("#lan").val() + "&src=" + $("#src").val() + "&problem_id={{ problem.id }}";
+        $.ajax({
+            url: "/students/commit",
+            type: "POST",
+            data: req_data,
+            dataType: "JSON",
+            success: function(resp) {
+                if (resp.code == 0) {
+                    $('#modal_form_course').modal('hide');
+                    window.location = "/teachers/courses";
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}课程列表{% endblock %}
+
+{% block page_content %}
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="dataTable_wrapper">
+            <table width="100%" class="table table-striped table-bordered table-hover center" id="dataTables-example">
+                <thead>
+                <tr>
+                    <th>课程名</th>
+                    <th>课程描述</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for course in courses %}
+                <tr class="odd gradeX">
+                    <td><a href="/teachers/problems?course_id={{ course.id }}">{{ course.name }}</a></td>
+                    <td>{{ course.description }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-xs" onclick="edit_course('{{ course.id }}', '{{ course.name }}', '{{ course.description }}')">关注</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block foot %}
+<script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+                'responsive': true,
+                'bSort': false,
+                'iDisplayLength': 15,
+                'bLengthChange': false,
+                'language': {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+        });
+    });
+
+</script>
+{% endblock %}
