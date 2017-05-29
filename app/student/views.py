@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author: mec
+import os
+
 from flask import render_template, request
 from flask_login import login_required, current_user
 
 from . import students
 from ..models.problem import Problem, Commit, Course
+from ..core import task
 
 
 @students.route('/problems')
@@ -45,6 +48,7 @@ def show_problem(p_id):
 
 @students.route('/commit', methods=['POST'])
 def commit():
+    work_dir = '/home/www/work'
     lan = request.form.get('lan')  # 语言种类
     src = request.form.get('src')  # 源代码
     problem_id = int(request.form.get('problem_id'))  # 问题id
@@ -52,4 +56,19 @@ def commit():
                         status=0, user_id=current_user.id,
                         detail=u'等待评测')
     new_commit.save()
+    commit_id = new_commit.id
+    dir_work = os.path.join(work_dir, str(commit_id))
+    print dir_work
+    if lan == 'C':
+        f = open(dir_work + '/main.c', 'w')
+        f.write(src)
+        f.close()
+    if lan == 'Java':
+        f = open(dir_work + '/Main.java', 'w')
+    if lan == 'Python':
+        f = open(dir_work + '/main.py', 'w')
+    f.write(src)
+    f.close()
+
+    task(problem_id, commit_id, lan)
     return render_template('/students/rank.html')

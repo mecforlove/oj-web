@@ -4,11 +4,16 @@
 import os
 import subprocess
 
+from ..models.problem import Commit
+
+from .. import db
+
 work_dir = '/home/www/work'
 
 
 def compile_src(commit_id, language):
     """将程序编译成可执行文件"""
+    commit = Commit.query.get(commit_id)
     language = language.lower()
     dir_work = os.path.join(work_dir, str(commit_id))
     build_cmd = {
