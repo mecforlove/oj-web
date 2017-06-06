@@ -4,7 +4,7 @@
 import os
 import logging
 import shlex
-import lorun
+# import lorun
 
 from .. import db
 

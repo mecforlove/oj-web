@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}系统状态{% endblock %}
+
+{% block page_content %}
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="dataTable_wrapper">
+            <table width="100%" class="table table-striped table-bordered table-hover center" id="dataTables-example">
+                <thead>
+                <tr>
+                    <th>提交编号</th>
+                    <th>提交人</th>
+                    <th>题目</th>
+                    <th>语言</th>
+                    <th>状态</th>
+                    <th>耗时</th>
+                    <th>内存使用</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for commit in commits %}
+                <tr class="odd gradeX">
+                    <td><a href="/teachers">{{ commit.id }}</a></td>
+                    <td>{{ commit.user.name }}</td>
+                    <td><a href="/students/problems/{{ commit.problem.id }}">{{ commit.problem.title }}</a></td>
+                    <td>{{ commit.language }}</td>
+                    <td>{{ commit.detail }}</td>
+                    <td>{{ commit.time or '0'}}ms</td>
+                    <td>{{ commit.mem or '0'}}KB</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block foot %}
+<script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+                'responsive': true,
+                'bSort': false,
+                'iDisplayLength': 15,
+                'bLengthChange': false,
+                'language': {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+        });
+    });
+
+</script>
+{% endblock %}

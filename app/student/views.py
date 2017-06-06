@@ -3,12 +3,14 @@
 # @Author: mec
 import os
 
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from flask_login import login_required, current_user
 
 from . import students
 from ..models.problem import Problem, Commit, Course
-from ..core import task
+from ..utils.response import common_response
+from ..core.compile import compile_src
+from ..core import judge
 
 
 @students.route('/problems')
@@ -48,27 +50,30 @@ def show_problem(p_id):
 
 @students.route('/commit', methods=['POST'])
 def commit():
-    work_dir = '/home/www/work'
     lan = request.form.get('lan')  # 语言种类
     src = request.form.get('src')  # 源代码
     problem_id = int(request.form.get('problem_id'))  # 问题id
     new_commit = Commit(problem_id=problem_id, language=lan, code=src,
                         status=0, user_id=current_user.id,
-                        detail=u'等待评测')
+                        detail=u'Accept', mem=10220, time=503)
     new_commit.save()
-    commit_id = new_commit.id
-    dir_work = os.path.join(work_dir, str(commit_id))
-    print dir_work
-    if lan == 'C':
-        f = open(dir_work + '/main.c', 'w')
-        f.write(src)
-        f.close()
-    if lan == 'Java':
-        f = open(dir_work + '/Main.java', 'w')
-    if lan == 'Python':
-        f = open(dir_work + '/main.py', 'w')
-    f.write(src)
-    f.close()
+    work_dir = '/Users/mec/oj_work/%s' % new_commit.id
+    os.mkdir(work_dir)  # 创建工作目录
+    if lan.lower() == 'c':
+        with open(work_dir + '/main.c', 'w') as f:
+            f.write(src)
+    elif lan.lower() == 'python':
+        with open(work_dir + 'main.py', 'w') as f:
+            f.write(src)
+    else:
+        return jsonify(common_response(-1, 'language not support'))
+    compile_src(new_commit.id, lan)
+    judge(problem_id, new_commit.id)
+    return jsonify(common_response(0, 'ok'))
 
-    task(problem_id, commit_id, lan)
-    return render_template('/students/rank.html')
+
+@students.route('/commits')
+def show_commits():
+    commits = Commit.query.all()
+    return render_template('/main/commits.html', commits=commits)
+

@@ -28,7 +28,8 @@
 {% block foot %}
 <script>
     function submit_code() {
-        req_data = "lan=" + $("#lan").val() + "&src=" + $("#src").val() + "&problem_id={{ problem.id }}";
+        var src = encodeURIComponent($("#src").val());  // 转义代码中的特殊字符
+        req_data = "lan=" + $("#lan").val() + "&src=" + src + "&problem_id={{ problem.id }}";
         $.ajax({
             url: "/students/commit",
             type: "POST",
@@ -36,8 +37,7 @@
             dataType: "JSON",
             success: function(resp) {
                 if (resp.code == 0) {
-                    $('#modal_form_course').modal('hide');
-                    window.location = "/teachers/courses";
+                    window.location = "/students/commits";
                 }
             }
         });

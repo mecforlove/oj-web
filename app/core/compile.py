@@ -7,8 +7,7 @@ import subprocess
 from ..models.problem import Commit
 
 from .. import db
-
-work_dir = '/home/www/work'
+from config import *
 
 
 def compile_src(commit_id, language):
@@ -18,7 +17,7 @@ def compile_src(commit_id, language):
     dir_work = os.path.join(work_dir, str(commit_id))
     build_cmd = {
         "c":
-        "gcc main.c -o main -Wall -lm -O2 -std=c99 --static -DONLINE_JUDGE",
+        "gcc main.c -o main",
         "c++": "g++ main.cpp -O2 -Wall -lm --static -DONLINE_JUDGE -o main",
         "java": "javac Main.java",
         "ruby": "reek main.rb",
@@ -46,4 +45,7 @@ def compile_src(commit_id, language):
     f.close()
     if p.returncode == 0:  # 返回值为0,编译成功
         return True
+    commit.status = 1
+    commit.detail = err + out
+    db.session.commit()  # 写入错误信息
     return False

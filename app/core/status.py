@@ -3,7 +3,7 @@
 # @Author: mec
 STATUS = {
     0: 'Waiting',
-    1: 'Compiling',
+    1: 'Compile Error',
     2: 'Accepted',
     3: 'Wrong Answer',
     4: 'Time Limit Exceeded',
