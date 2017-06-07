@@ -11,17 +11,15 @@
                 <tr>
                     <th>课程名</th>
                     <th>课程描述</th>
-                    <th>操作</th>
+                    <th>任课教师</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for course in courses %}
                 <tr class="odd gradeX">
-                    <td><a href="/teachers/problems?course_id={{ course.id }}">{{ course.name }}</a></td>
+                    <td><a href="/students/problems?course_id={{ course.id }}">{{ course.name }}</a></td>
                     <td>{{ course.description }}</td>
-                    <td>
-                        <button class="btn btn-primary btn-xs" onclick="edit_course('{{ course.id }}', '{{ course.name }}', '{{ course.description }}')">关注</button>
-                    </td>
+                    <td><a href="/students/problems?teacher_id={{ course.user.id }}">{{ course.user.name }}</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>

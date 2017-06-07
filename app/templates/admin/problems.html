@@ -13,10 +13,7 @@
                     <th>标题</th>
                     <th>课程</th>
                     <th>教师</th>
-                    <th>限时</th>
-                    <th>通过率</th>
-                    <th>通过次数</th>
-                    <th>尝试人数</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,10 +23,7 @@
                     <td><a href="/students/problems/{{ problem.id }}">{{ problem.title }}</a></td>
                     <td><a href="/students/problems?course_id={{ problem.course.id }}">{{ problem.course.name }}</a></td>
                     <td><a href="/students/problems?teacher_id={{ problem.course.user.id }}">{{ problem.course.user.name }}</a></td>
-                    <td>{{ problem.time }}ms</td>
-                    <td>{{ problem.pass_rate_str }}</td>
-                    <td><a href="/students/commits?type=ac">{{ problem.pass_times }}</a></td>
-                    <td><a href="/students/commits">{{ problem.try_times }}</a></td>
+                    <td><a href="/admin/problems/{{ problem.id }}">删除</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>

@@ -18,7 +18,7 @@ def compile_src(commit_id, language):
     build_cmd = {
         "c":
         "gcc main.c -o main",
-        "c++": "g++ main.cpp -O2 -Wall -lm --static -DONLINE_JUDGE -o main",
+        "c++": "g++ main.cpp -o main",
         "java": "javac Main.java",
         "ruby": "reek main.rb",
         "perl": "perl -c main.pl",
@@ -46,6 +46,6 @@ def compile_src(commit_id, language):
     if p.returncode == 0:  # 返回值为0,编译成功
         return True
     commit.status = 1
-    commit.detail = err + out
+    commit.detail = 'Compile Error'
     db.session.commit()  # 写入错误信息
     return False

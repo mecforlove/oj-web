@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author: mec
+from __future__ import division
 import os
 
 from flask import render_template, request, jsonify
@@ -8,6 +9,7 @@ from flask_login import login_required, current_user
 
 from . import students
 from ..models.problem import Problem, Commit, Course
+from ..models.user import User
 from ..utils.response import common_response
 from ..core.compile import compile_src
 from ..core import judge
@@ -16,18 +18,25 @@ from ..core import judge
 @students.route('/problems')
 @login_required
 def show_problems():
+    teacher_id = int(request.args.get('teacher_id', 0))
+    course_id = int(request.args.get('course_id', 0))
     problems = Problem.query.all()
+    if teacher_id:
+        problems = Problem.query.join(Course).join(User).\
+            filter(User.id == teacher_id).all()
+    if course_id:
+        problems = Problem.query.filter_by(course_id=course_id).all()
     for p in problems:
         try_times = Commit.query.filter_by(problem_id=p.id).count()
         pass_times = Commit.query.filter_by(problem_id=p.id,
-                                            status=1).count()
+                                            status=2).count()
         if try_times:
-            pass_rate = pass_times / try_times
+            pass_rate = pass_times / try_times * 100
         else:
             pass_rate = 0.0
         setattr(p, 'try_times', try_times)
         setattr(p, 'pass_times', pass_times)
-        setattr(p, 'pass_rate', pass_rate)
+        setattr(p, 'pass_rate_str', "%.1f%%" % pass_rate)
     return render_template('/student/problems.html', problems=problems)
 
 
@@ -62,18 +71,37 @@ def commit():
     if lan.lower() == 'c':
         with open(work_dir + '/main.c', 'w') as f:
             f.write(src)
+        if not compile_src(new_commit.id, lan):
+            return jsonify(common_response(0, 'compile error'))
     elif lan.lower() == 'python':
-        with open(work_dir + 'main.py', 'w') as f:
+        with open(work_dir + '/main.py', 'w') as f:
             f.write(src)
+    elif lan.lower() == 'c++':
+        with open(work_dir + '/main.cpp', 'w') as f:
+            f.write(src)
+        if not compile_src(new_commit.id, lan):
+            return jsonify(common_response(0, 'compile error'))
     else:
         return jsonify(common_response(-1, 'language not support'))
-    compile_src(new_commit.id, lan)
     judge(problem_id, new_commit.id)
     return jsonify(common_response(0, 'ok'))
 
 
 @students.route('/commits')
 def show_commits():
-    commits = Commit.query.all()
+    _type = request.args.get('type')
+    if _type == 'ac':
+        commits = Commit.query.filter_by(status=2).all()
+    else:
+        commits = Commit.query.all()
+    commits.reverse()
     return render_template('/main/commits.html', commits=commits)
+
+
+@students.route('/commits/<int:commit_id>')
+def show_commit(commit_id):
+    commit = Commit.query.get(commit_id)
+    commit.code = commit.code.replace('\n', '<br/ >')
+    return render_template('/main/commit_detail.html', commit=commit)
+
 

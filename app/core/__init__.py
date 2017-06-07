@@ -18,6 +18,9 @@ def judge_one(in_file, out_file, commit):
         cmd = './main'
     elif lan.lower() == 'python':
         cmd = 'python main.py'
+    elif lan.lower() == 'c++':
+        cmd = './main'
+    start_time = time.time()
     p = subprocess.Popen(
         cmd,
         shell=True,
@@ -25,9 +28,7 @@ def judge_one(in_file, out_file, commit):
         stdin=ifile,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    start_time = time.time()
     out, error = p.communicate()
-    print out
     end_time = time.time()
     t = end_time - start_time
     with open(out_file) as f:

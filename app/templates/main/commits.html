@@ -15,19 +15,19 @@
                     <th>语言</th>
                     <th>状态</th>
                     <th>耗时</th>
-                    <th>内存使用</th>
+                    <th>提交时间</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for commit in commits %}
                 <tr class="odd gradeX">
-                    <td><a href="/teachers">{{ commit.id }}</a></td>
+                    <td><a href="/students/commits/{{ commit.id }}">{{ commit.id }}</a></td>
                     <td>{{ commit.user.name }}</td>
                     <td><a href="/students/problems/{{ commit.problem.id }}">{{ commit.problem.title }}</a></td>
                     <td>{{ commit.language }}</td>
                     <td>{{ commit.detail }}</td>
                     <td>{{ commit.time or '0'}}ms</td>
-                    <td>{{ commit.mem or '0'}}KB</td>
+                    <td>{{ commit.gmt_created or '0'}}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
